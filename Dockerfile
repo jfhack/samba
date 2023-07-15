@@ -1,5 +1,6 @@
 FROM alpine
 MAINTAINER David Personette <dperson@gmail.com>
+LABEL org.opencontainers.image.source=https://github.com/jfhack/samba
 
 # Install samba
 RUN apk --no-cache --no-progress upgrade && \
