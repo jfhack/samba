@@ -1,4 +1,4 @@
-[![logo](https://raw.githubusercontent.com/dperson/samba/master/logo.jpg)](https://www.samba.org)
+[![logo](logo.jpg)](https://www.samba.org)
 
 # Samba
 
@@ -12,21 +12,38 @@ Windows, OS/2, Linux and many others.
 
 # How to use this image
 
+The image is published to the GitHub Container Registry as
+`ghcr.io/jfhack/samba` for `linux/amd64`, `linux/arm64`, `linux/arm/v7` and
+`linux/arm/v6`. GitHub Actions rebuilds it on every push to `main` and every
+Monday, so it always ships the latest Samba and security updates from Alpine.
+
+Available tags:
+
+ * `latest` - most recent build of the `main` branch
+ * `YYYYMMDD` - build from a given day, to pin a known version
+ * `sha-<commit>` - build of a given commit
+ * `X.Y.Z` - build of the git tag `vX.Y.Z`
+
 By default there are no shares configured, additional ones can be added.
 
 ## Hosting a Samba instance
 
-    sudo docker run -it -p 139:139 -p 445:445 -d dperson/samba -p
+    sudo docker run -it -p 139:139 -p 445:445 -d ghcr.io/jfhack/samba -p
 
 OR set local storage:
 
     sudo docker run -it --name samba -p 139:139 -p 445:445 \
                 -v /path/to/directory:/mount \
-                -d dperson/samba -p
+                -d ghcr.io/jfhack/samba -p
+
+OR with docker compose, adjust the volumes and command in
+[docker-compose.yml](docker-compose.yml) and run:
+
+    sudo docker compose up -d
 
 ## Configuration
 
-    sudo docker run -it --rm dperson/samba -h
+    sudo docker run -it --rm ghcr.io/jfhack/samba -h
     Usage: samba.sh [-opt] [command]
     Options (fields in '[]' are optional, '<>' are required):
         -h          This help
@@ -109,11 +126,11 @@ Any of the commands can be run at creation with `docker run` or later with
 
 ### Setting the Timezone
 
-    sudo docker run -it -e TZ=EST5EDT -p 139:139 -p 445:445 -d dperson/samba -p
+    sudo docker run -it -e TZ=EST5EDT -p 139:139 -p 445:445 -d ghcr.io/jfhack/samba -p
 
 ### Start an instance creating users and shares:
 
-    sudo docker run -it -p 139:139 -p 445:445 -d dperson/samba -p \
+    sudo docker run -it -p 139:139 -p 445:445 -d ghcr.io/jfhack/samba -p \
                 -u "example1;badpass" \
                 -u "example2;badpass" \
                 -s "public;/share" \
@@ -134,7 +151,7 @@ Add the `-p` option to the end of your options to the container, or set the
 
     sudo docker run -it --name samba -p 139:139 -p 445:445 \
                 -v /path/to/directory:/mount \
-                -d dperson/samba -p
+                -d ghcr.io/jfhack/samba -p
 
 If changing the permissions of your files is not possible in your setup you
 can instead set the environment variables `USERID` and `GROUPID` to the
@@ -144,11 +161,11 @@ values of the owner of your files.
 that's never freed by the samba processes. Recommended work around below:
 
 Add the `-m 512m` option to docker run command, or `mem_limit:` in
-docker_compose.yml files, IE:
+docker-compose.yml files, IE:
 
     sudo docker run -it --name samba -m 512m -p 139:139 -p 445:445 \
                 -v /path/to/directory:/mount \
-                -d dperson/samba -p
+                -d ghcr.io/jfhack/samba -p
 
 * Attempting to connect with the `smbclient` commandline tool. By default samba
 still tries to use SMB1, which is depriciated and has security issues. This
@@ -159,4 +176,4 @@ any other options you would specify.
 ## Issues
 
 If you have any problems with or questions about this image, please contact me
-through a [GitHub issue](https://github.com/dperson/samba/issues).
+through a [GitHub issue](https://github.com/jfhack/samba/issues).

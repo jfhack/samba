@@ -1,8 +1,6 @@
-version: '3.4'
-
 services:
   samba:
-    image: dperson/samba
+    image: ghcr.io/jfhack/samba:latest
     environment:
       TZ: 'EST5EDT'
     networks:
